@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ONeutral.springbootemail.dao.UserDao" >
+
+  <!--注册用户-->
+  <insert id="register" parameterType="User" >
+    insert into user ( username, password,useremail,status,code)
+    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{useremail,jdbcType=VARCHAR},
+      #{status,jdbcType=INTEGER},#{code,jdbcType=INTEGER})
+  </insert>
+
+  <!--根据激活码code查询用户-->
+  <select id="checkCode" parameterType="String" resultType="User">
+    select * from user where code = #{code}
+  </select>
+
+  <!--激活账户，修改用户状态-->
+  <update id="updateUserStatus" parameterType="User">
+    update user set status=1,code=null where id=#{id}
+  </update>
+
+  <!--登录,根据 status=1 进行查询-->
+  <select id="loginUser" resultType="User" >
+    select * from user where username=#{username} and password=#{password} and status=1
+  </select>
+</mapper>
